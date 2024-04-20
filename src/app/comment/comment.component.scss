@@ -1,0 +1,15 @@
+.comment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  &__text {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__date {
+    color: gray;
+  }
+}

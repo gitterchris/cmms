@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommentListComponent } from './comment-list/comment-list.component';
+import { ButtonComponent } from './button/button.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommentListComponent],
+  imports: [RouterOutlet, CommentListComponent, ButtonComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

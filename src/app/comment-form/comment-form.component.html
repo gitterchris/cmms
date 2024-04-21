@@ -1,0 +1,18 @@
+<form
+  [formGroup]="commentForm"
+  (ngSubmit)="handleCommentSubmit()"
+  class="comment-form"
+>
+  <header>
+    <h1>Comments</h1>
+  </header>
+  <app-comment-list [comments]="comments" />
+  <app-comment-box [form]="commentForm" />
+  <div class="cta">
+    <app-button
+      text="Add Comment"
+      imageSource="assets/comment.svg"
+      (onButtonClick)="handleCommentSubmit()"
+    />
+  </div>
+</form>

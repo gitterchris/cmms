@@ -8,10 +8,9 @@ describe('CommentBoxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommentBoxComponent]
-    })
-    .compileComponents();
-    
+      imports: [CommentBoxComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CommentBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,8 +1,11 @@
 <div class="comment-box">
-  <label for="comment-box">Completion Notes:</label>
-  <textarea
-    name="comment"
-    id="comment-box"
-    (keydown)="onKeydown($event)"
-  ></textarea>
+  <label for="comment">Completion Notes:</label>
+  <div [formGroup]="form">
+    <textarea
+      name="comment"
+      formControlName="comment"
+      id="comment"
+      (keydown)="onKeydown($event)"
+    ></textarea>
+  </div>
 </div>

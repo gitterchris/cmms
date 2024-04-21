@@ -1,16 +1,6 @@
 <main class="main">
   <div class="content">
-    <header>
-      <h1>Comments</h1>
-    </header>
-    <app-comment-list [comments]="comments" />
-    <app-comment-box />
-    <app-button
-      type="submit"
-      text="Add Comment"
-      imageSource="assets/comment.svg"
-      (onButtonClick)="handleCommentSubmit()"
-    />
+    <app-comment-form />
   </div>
 </main>
 <router-outlet />

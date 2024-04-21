@@ -10,6 +10,9 @@ import { CommentComponent } from './comment/comment.component';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  comment = {
+    text: 'This Task was assigned to Daryl Babb',
+    dateTime: new Date(),
+  };
   title = 'cmms';
-  date = new Date();
 }

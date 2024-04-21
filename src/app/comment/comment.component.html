@@ -1,8 +1,8 @@
 <div class="comment">
   <p class="comment__text">
-    <img src="assets/comment.svg" width="20" height="20" /> {{ comment }}
+    <img src="assets/comment.svg" width="20" height="20" /> {{ comment.text }}
   </p>
   <div class="comment__date">
-    System - {{ dateTime | date : "yyyy/MM/dd hh:mm a" }}
+    System - {{ comment.dateTime | date : "yyyy/MM/dd hh:mm a" }}
   </div>
 </div>

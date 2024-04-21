@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Comment } from '../comments';
 
 @Component({
   selector: 'app-comment',
@@ -9,6 +10,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './comment.component.scss',
 })
 export class CommentComponent {
-  @Input() comment!: string;
-  @Input() dateTime!: Date;
+  @Input() comment!: Comment;
 }

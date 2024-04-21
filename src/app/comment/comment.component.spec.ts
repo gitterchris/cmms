@@ -20,8 +20,10 @@ describe('CommentComponent', () => {
   });
 
   it('should contains the comment based on the input', () => {
-    component.comment = '__comment__';
-    component.dateTime = new Date('2024-01-02T23:50:21.817Z');
+    component.comment = {
+      text: '__comment__',
+      dateTime: new Date('2024-01-02T23:50:21.817Z'),
+    };
 
     fixture.detectChanges();
 

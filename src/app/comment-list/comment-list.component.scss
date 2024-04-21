@@ -1,0 +1,12 @@
+.comment-list {
+  list-style-type: none;
+  padding-left: 0;
+
+  & > li {
+    border-bottom: 1px solid gray;
+  }
+
+  & > li:last-child {
+    border-bottom: none;
+  }
+}

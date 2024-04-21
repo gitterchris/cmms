@@ -22,4 +22,8 @@ export class AppComponent {
     },
   ];
   title = 'cmms';
+
+  handleCommentSubmit() {
+    console.log('Form submitted!');
+  }
 }

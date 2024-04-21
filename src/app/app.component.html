@@ -3,12 +3,13 @@
     <header>
       <h1>Comments</h1>
     </header>
-    <app-comment-list [comments]="comments"></app-comment-list>
+    <app-comment-list [comments]="comments" />
     <app-button
       type="submit"
       text="Add Comment"
       imageSource="assets/comment.svg"
-    ></app-button>
+      (onButtonClick)="handleCommentSubmit()"
+    />
   </div>
 </main>
 <router-outlet />

@@ -43,4 +43,17 @@ describe('ButtonComponent', () => {
     expect(html.querySelector('button')?.type).toBe('submit');
     expect(html.querySelector('img')).toBe(null);
   });
+
+  it('should emit the event when button is clicked', () => {
+    component.text = 'Submit';
+    component.type = 'submit';
+    const emitSpy = spyOn(component.onButtonClick, 'emit');
+
+    fixture.detectChanges();
+
+    const html: HTMLElement = fixture.nativeElement;
+    const button = html.querySelector('button');
+    button?.click();
+    expect(emitSpy).toHaveBeenCalled();
+  });
 });

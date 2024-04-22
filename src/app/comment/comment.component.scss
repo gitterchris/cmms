@@ -6,10 +6,18 @@
 
   &__text {
     display: flex;
-    gap: 12px;
+    gap: 4px;
+
+    & > img {
+      padding-right: 8px;
+    }
   }
 
   &__date {
     color: gray;
+  }
+
+  &__user-name {
+    font-weight: bold;
   }
 }

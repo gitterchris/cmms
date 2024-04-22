@@ -1,6 +1,12 @@
 <div class="comment">
   <p class="comment__text">
-    <img src="assets/comment.svg" width="20" height="20" /> {{ comment.text }}
+    <img src="assets/comment.svg" width="20" height="20" />
+
+    <span
+      *ngFor="let word of words"
+      [ngClass]="{ 'comment__user-name': word.isUserName }"
+      >{{ word.text }}</span
+    >
   </p>
   <div class="comment__date">
     System - {{ comment.dateTime | date : "yyyy/MM/dd hh:mm a" }}

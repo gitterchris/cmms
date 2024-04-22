@@ -3,6 +3,9 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CommentListComponent } from '../comment-list/comment-list.component';
 import { CommentBoxComponent } from '../comment-box/comment-box.component';
+import { CommentsService } from '../comments.service';
+import { Comment } from '../comments';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-comment-form',
@@ -12,25 +15,24 @@ import { CommentBoxComponent } from '../comment-box/comment-box.component';
     CommentBoxComponent,
     ButtonComponent,
     ReactiveFormsModule,
+    CommonModule,
   ],
   templateUrl: './comment-form.component.html',
   styleUrl: './comment-form.component.scss',
 })
 export class CommentFormComponent {
   commentForm = this.formBuilder.group({ comment: '' });
-  comments = [
-    {
-      text: 'This Task was assigned to Daryl Babb',
-      dateTime: new Date(),
-    },
-    {
-      text: 'Waiting on parts',
-      dateTime: new Date(),
-    },
-  ];
+  comments!: Comment[];
   title = 'cmms';
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private commentService: CommentsService
+  ) {}
+
+  ngOnInit(): void {
+    this.comments = this.commentService.getComments();
+  }
 
   handleCommentSubmit() {
     console.log('Form submitted!', this.commentForm.value);

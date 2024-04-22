@@ -14,6 +14,7 @@
       name="comment"
       formControlName="comment"
       id="comment"
+      (focus)="manageUserList()"
       (keydown)="onKeydown($event)"
       (keyup)="onKeyup($event)"
     ></textarea>

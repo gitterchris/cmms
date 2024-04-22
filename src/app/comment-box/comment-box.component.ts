@@ -39,24 +39,38 @@ export class CommentBoxComponent {
   }
 
   onKeydown(event: KeyboardEvent) {
-    if (event.key === '@') {
-      this.showUserList = true;
+    if (this.showUserList === false) return;
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const currentSelectedIndex = this.filteredUsers.findIndex(
+        (user) => this.selectedUserID === user.userID
+      );
+      this.selectedUserID =
+        currentSelectedIndex === -1 || currentSelectedIndex === 0
+          ? this.filteredUsers[this.filteredUsers.length - 1].userID
+          : this.filteredUsers[currentSelectedIndex - 1].userID;
     }
 
-    if (event.key === ' ') {
-      this.resetUserList();
-    }
-
-    if (this.showUserList) {
-      this.filterUserList(event);
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const currentSelectedIndex = this.filteredUsers.findIndex(
+        (user) => this.selectedUserID === user.userID
+      );
+      this.selectedUserID =
+        currentSelectedIndex === -1 ||
+        currentSelectedIndex === this.filteredUsers.length - 1
+          ? this.filteredUsers[0].userID
+          : this.filteredUsers[currentSelectedIndex + 1].userID;
     }
   }
 
   onKeyup(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.selectedUserID) {
+    if (event.key === 'Enter' && this.selectedUserID && this.showUserList) {
       event.preventDefault();
-      this.handleUserClick(this.selectedUserID);
+      this.typeahead();
     }
+    this.manageUserList();
   }
 
   filterUserList(event: KeyboardEvent) {
@@ -68,25 +82,6 @@ export class CommentBoxComponent {
         this.resetUserList();
         return;
       }
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      const currentSelectedIndex = this.filteredUsers.findIndex(
-        (user) => this.selectedUserID === user.userID
-      );
-      this.selectedUserID =
-        currentSelectedIndex === -1 || currentSelectedIndex === 0
-          ? this.filteredUsers[this.filteredUsers.length - 1].userID
-          : this.filteredUsers[currentSelectedIndex - 1].userID;
-    } else if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      const currentSelectedIndex = this.filteredUsers.findIndex(
-        (user) => this.selectedUserID === user.userID
-      );
-      this.selectedUserID =
-        currentSelectedIndex === -1 ||
-        currentSelectedIndex === this.filteredUsers.length - 1
-          ? this.filteredUsers[0].userID
-          : this.filteredUsers[currentSelectedIndex + 1].userID;
     }
     this.filteredUsers = this.userService.filterUsers(
       this.filter.join('').substring(1)
@@ -122,28 +117,53 @@ export class CommentBoxComponent {
   typeahead() {
     if (this.selectedUserID === 0) return;
 
-    const selectedUser = this.userService.getUser(this.selectedUserID) ?? '';
+    const selectedUser = this.userService.getUser(this.selectedUserID);
 
-    // TODO: this is buggy. Please fix.
+    // TODO: this is still buggy. Please fix.
     const oldTextAreaValue = this.inputRef.value;
-    const startIndex = this.getStartIndex() + 1;
+
+    const startIndex = this.getStartIndex();
     const newLeftSide = oldTextAreaValue.slice(0, startIndex);
-    const newRightSide = oldTextAreaValue.slice(this.inputRef.selectionStart);
+    const selectedUserLength = selectedUser?.length ?? 0;
+    const endIndex = startIndex + selectedUserLength + 1;
+    const newRightSide = oldTextAreaValue.slice(endIndex);
 
-    const newTextAreaValue = newLeftSide + `@${selectedUser} ` + newRightSide;
-    this.inputRef.value = newTextAreaValue;
+    const newTextAreaValue = `${newLeftSide
+      .replace('\n', '')
+      .trim()} @${selectedUser} ${newRightSide
+      .replace('\n', '')
+      .trim()} `.trim();
+    this.inputRef.value = newTextAreaValue + ' ';
 
-    const newCursorLocation = startIndex + selectedUser.length + 1;
+    const newCursorLocation = newLeftSide.length + selectedUserLength + 2;
     this.inputRef.selectionStart = newCursorLocation;
     this.inputRef.selectionEnd = newCursorLocation;
   }
 
   getStartIndex() {
     let startIndex = this.inputRef.selectionStart;
-    while (this.inputRef.value[startIndex] !== ' ' && startIndex !== 0) {
+    while (startIndex > 0 && this.inputRef.value[startIndex - 1] !== ' ') {
       --startIndex;
     }
 
     return startIndex;
+  }
+
+  getCurrentWordBeingTyped() {
+    const startIndex = this.getStartIndex();
+    const endIndex = this.inputRef.selectionStart;
+    return this.inputRef.value.substring(startIndex, endIndex);
+  }
+
+  manageUserList() {
+    const wordBeingTyped = this.getCurrentWordBeingTyped().trim();
+    if (!wordBeingTyped.startsWith('@') || !wordBeingTyped) {
+      this.showUserList = false;
+      return;
+    }
+
+    this.showUserList = true;
+    this.filteredUsers = this.userService.filterUsers(wordBeingTyped);
+    if (!this.filteredUsers.length) this.showUserList = false;
   }
 }

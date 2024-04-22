@@ -18,10 +18,10 @@ export class UsersService {
 
   filterUsers(filter: string) {
     const allUsers = this.getUsers();
-    if (!filter) return allUsers;
+    if (!filter || filter === '@') return allUsers;
 
     return allUsers.filter((user) =>
-      user.name.toLowerCase().startsWith(filter.toLowerCase())
+      user.name.toLowerCase().startsWith(filter.substring(1).toLowerCase())
     );
   }
 

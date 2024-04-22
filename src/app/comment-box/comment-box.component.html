@@ -1,7 +1,7 @@
 <div class="comment-box">
   <app-users-list
     *ngIf="showUserList"
-    [users]="users"
+    [users]="filteredUsers"
     (onUserHover)="handleUserHover($event)"
     (onUserClick)="handleUserClick($event)"
   />

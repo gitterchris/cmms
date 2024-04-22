@@ -10,6 +10,7 @@ import { User } from '../types';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent {
+  @Input() selectedUserID!: number;
   @Input() users!: User[];
   @Output() onUserHover = new EventEmitter();
   @Output() onUserClick = new EventEmitter();

@@ -14,7 +14,9 @@
   width: 750px;
   background-color: lightgray;
 
-  & > li:hover {
+  & > li:hover,
+  &__selected {
     background-color: lightslategray;
+    cursor: pointer;
   }
 }

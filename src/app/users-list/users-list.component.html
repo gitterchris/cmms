@@ -3,6 +3,7 @@
     *ngFor="let user of users"
     (mouseover)="onUserHover.emit(user.userID)"
     (click)="onUserClick.emit(user.userID)"
+    [ngClass]="{ 'users-list__selected': selectedUserID === user.userID }"
   >
     {{ user.name }}
   </li>

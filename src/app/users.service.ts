@@ -24,4 +24,8 @@ export class UsersService {
       user.name.toLowerCase().startsWith(filter.toLowerCase())
     );
   }
+
+  getUser(userID: number) {
+    return this.getUsers().find((user) => userID === user.userID)?.name;
+  }
 }

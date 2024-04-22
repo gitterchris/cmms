@@ -9,6 +9,7 @@
   <label for="comment">Completion Notes:</label>
   <div [formGroup]="form">
     <textarea
+      #comment
       name="comment"
       formControlName="comment"
       id="comment"

@@ -21,11 +21,6 @@ export class CommentBoxComponent {
   filteredUsers!: User[];
   showUserList = false;
   selectedUserID = 0;
-  /* 
-    We need the '@' as the first element to determine
-    if the popup will still be shown after repeated backspace. 
-  */
-  filter: string[] = ['@'];
 
   constructor(private userService: UsersService) {}
 
@@ -73,29 +68,9 @@ export class CommentBoxComponent {
     this.manageUserList();
   }
 
-  filterUserList(event: KeyboardEvent) {
-    if (this.isLetter(event)) {
-      this.filter.push(event.key);
-    } else if (event.key === 'Backspace') {
-      this.filter.pop();
-      if (!this.filter.length) {
-        this.resetUserList();
-        return;
-      }
-    }
-    this.filteredUsers = this.userService.filterUsers(
-      this.filter.join('').substring(1)
-    );
-
-    if (!this.filteredUsers.length) {
-      this.resetUserList();
-    }
-  }
-
   resetUserList() {
     this.showUserList = false;
     this.selectedUserID = 0;
-    this.filter = ['@'];
   }
 
   isLetter(event: KeyboardEvent) {
@@ -164,6 +139,11 @@ export class CommentBoxComponent {
 
     this.showUserList = true;
     this.filteredUsers = this.userService.filterUsers(wordBeingTyped);
+    const currentSelectedUserInTheFilteredResult = this.filteredUsers.some(
+      (user) => user.userID === this.selectedUserID
+    );
+    if (!this.selectedUserID || !currentSelectedUserInTheFilteredResult)
+      this.selectedUserID = this.filteredUsers[0]?.userID ?? 0;
     if (!this.filteredUsers.length) this.showUserList = false;
   }
 }

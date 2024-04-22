@@ -52,6 +52,12 @@ export class CommentBoxComponent {
     }
   }
 
+  onKeyup(event: KeyboardEvent) {
+    if (event.key === 'Enter' && this.selectedUserID) {
+      this.handleUserClick(this.selectedUserID);
+    }
+  }
+
   filterUserList(event: KeyboardEvent) {
     if (this.isLetter(event)) {
       this.filter.push(event.key);
@@ -61,8 +67,6 @@ export class CommentBoxComponent {
         this.resetUserList();
         return;
       }
-    } else if (event.key === 'Enter') {
-      if (this.selectedUserID) this.handleUserClick(this.selectedUserID);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       const currentSelectedIndex = this.filteredUsers.findIndex(

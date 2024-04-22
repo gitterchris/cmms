@@ -64,6 +64,8 @@ export class CommentBoxComponent {
     if (event.key === 'Enter' && this.selectedUserID && this.showUserList) {
       event.preventDefault();
       this.typeahead();
+      this.showUserList = false;
+      return;
     }
     this.manageUserList();
   }
@@ -99,8 +101,8 @@ export class CommentBoxComponent {
 
     const startIndex = this.getStartIndex();
     const newLeftSide = oldTextAreaValue.slice(0, startIndex);
-    const selectedUserLength = selectedUser?.length ?? 0;
-    const endIndex = startIndex + selectedUserLength + 1;
+    const currentFilter = this.getCurrentWordBeingTyped();
+    const endIndex = startIndex + currentFilter.length + 1; // +1 for the '@' sign
     const newRightSide = oldTextAreaValue.slice(endIndex);
 
     const newTextAreaValue = `${newLeftSide
@@ -113,7 +115,8 @@ export class CommentBoxComponent {
     // not sure if mutating this is a good idea in Angular since this form is coming from parent.
     // without this, form is not picking up the entire username value.
     this.form.value.comment = newTextAreaValue + ' ';
-    const newCursorLocation = newLeftSide.length + selectedUserLength + 2;
+    const newCursorLocation =
+      newLeftSide.length + (selectedUser?.length ?? 0) + 2;
     this.inputRef.selectionStart = newCursorLocation;
     this.inputRef.selectionEnd = newCursorLocation;
   }

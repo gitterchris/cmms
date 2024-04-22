@@ -39,7 +39,6 @@ export class CommentBoxComponent {
   }
 
   onKeydown(event: KeyboardEvent) {
-    console.log('CHRIS!!! KEY ENTERED!!!', event);
     if (event.key === '@') {
       this.showUserList = true;
     }
@@ -62,8 +61,26 @@ export class CommentBoxComponent {
         this.resetUserList();
         return;
       }
+    } else if (event.key === 'Enter') {
+      if (this.selectedUserID) this.handleUserClick(this.selectedUserID);
+    } else if (event.key === 'ArrowUp') {
+      const currentSelectedIndex = this.filteredUsers.findIndex(
+        (user) => this.selectedUserID === user.userID
+      );
+      this.selectedUserID =
+        currentSelectedIndex === -1 || currentSelectedIndex === 0
+          ? this.filteredUsers[this.filteredUsers.length - 1].userID
+          : this.filteredUsers[currentSelectedIndex - 1].userID;
+    } else if (event.key === 'ArrowDown') {
+      const currentSelectedIndex = this.filteredUsers.findIndex(
+        (user) => this.selectedUserID === user.userID
+      );
+      this.selectedUserID =
+        currentSelectedIndex === -1 ||
+        currentSelectedIndex === this.filteredUsers.length - 1
+          ? this.filteredUsers[0].userID
+          : this.filteredUsers[currentSelectedIndex + 1].userID;
     }
-
     this.filteredUsers = this.userService.filterUsers(
       this.filter.join('').substring(1)
     );

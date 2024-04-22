@@ -62,8 +62,10 @@ export class CommentBoxComponent {
         return;
       }
     } else if (event.key === 'Enter') {
+      event.preventDefault();
       if (this.selectedUserID) this.handleUserClick(this.selectedUserID);
     } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
       const currentSelectedIndex = this.filteredUsers.findIndex(
         (user) => this.selectedUserID === user.userID
       );
@@ -72,6 +74,7 @@ export class CommentBoxComponent {
           ? this.filteredUsers[this.filteredUsers.length - 1].userID
           : this.filteredUsers[currentSelectedIndex - 1].userID;
     } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
       const currentSelectedIndex = this.filteredUsers.findIndex(
         (user) => this.selectedUserID === user.userID
       );
@@ -119,13 +122,24 @@ export class CommentBoxComponent {
 
     // TODO: this is buggy. Please fix.
     const oldTextAreaValue = this.inputRef.value;
-    const startIndex = this.inputRef.selectionStart;
-    const leftSide = oldTextAreaValue.slice(0, startIndex);
-    const lastIndexOfDelimiter = leftSide.lastIndexOf('@');
-    const newLeftSide = leftSide.substring(0, lastIndexOfDelimiter);
+    const startIndex = this.getStartIndex() + 1;
+    const newLeftSide = oldTextAreaValue.slice(0, startIndex);
+    const newRightSide = oldTextAreaValue.slice(this.inputRef.selectionStart);
 
-    const newTextAreaValue =
-      newLeftSide + `@${selectedUser} ` + oldTextAreaValue.slice(startIndex);
+    const newTextAreaValue = newLeftSide + `@${selectedUser} ` + newRightSide;
     this.inputRef.value = newTextAreaValue;
+
+    const newCursorLocation = startIndex + selectedUser.length + 1;
+    this.inputRef.selectionStart = newCursorLocation;
+    this.inputRef.selectionEnd = newCursorLocation;
+  }
+
+  getStartIndex() {
+    let startIndex = this.inputRef.selectionStart;
+    while (this.inputRef.value[startIndex] !== ' ' && startIndex !== 0) {
+      --startIndex;
+    }
+
+    return startIndex;
   }
 }

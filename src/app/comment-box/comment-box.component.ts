@@ -62,7 +62,6 @@ export class CommentBoxComponent {
         return;
       }
     } else if (event.key === 'Enter') {
-      event.preventDefault();
       if (this.selectedUserID) this.handleUserClick(this.selectedUserID);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();

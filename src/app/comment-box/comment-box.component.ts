@@ -110,6 +110,9 @@ export class CommentBoxComponent {
       .trim()} `.trim();
     this.inputRef.value = newTextAreaValue + ' ';
 
+    // not sure if mutating this is a good idea in Angular since this form is coming from parent.
+    // without this, form is not picking up the entire username value.
+    this.form.value.comment = newTextAreaValue + ' ';
     const newCursorLocation = newLeftSide.length + selectedUserLength + 2;
     this.inputRef.selectionStart = newCursorLocation;
     this.inputRef.selectionEnd = newCursorLocation;

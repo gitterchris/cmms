@@ -54,6 +54,7 @@ export class CommentBoxComponent {
 
   onKeyup(event: KeyboardEvent) {
     if (event.key === 'Enter' && this.selectedUserID) {
+      event.preventDefault();
       this.handleUserClick(this.selectedUserID);
     }
   }

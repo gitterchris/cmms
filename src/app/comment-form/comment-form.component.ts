@@ -4,7 +4,7 @@ import { ButtonComponent } from '../button/button.component';
 import { CommentListComponent } from '../comment-list/comment-list.component';
 import { CommentBoxComponent } from '../comment-box/comment-box.component';
 import { CommentsService } from '../comments.service';
-import { Comment } from '../comments';
+import { Comment } from '../types';
 import { CommonModule } from '@angular/common';
 
 @Component({

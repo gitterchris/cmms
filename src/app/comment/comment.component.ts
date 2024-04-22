@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Comment } from '../comments';
+import { Comment } from '../types';
 import { UsersService } from '../users.service';
 
 interface Word {

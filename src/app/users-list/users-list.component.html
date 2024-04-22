@@ -1,0 +1,9 @@
+<ul class="users-list">
+  <li
+    *ngFor="let user of users"
+    (mouseover)="onUserHover.emit(user.userID)"
+    (click)="onUserClick.emit(user.userID)"
+  >
+    {{ user.name }}
+  </li>
+</ul>

@@ -1,0 +1,20 @@
+.users-list {
+  list-style-type: none;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid silver;
+  border-radius: 3px;
+  max-height: 100px;
+  overflow-y: auto;
+  z-index: 99;
+  position: absolute;
+  bottom: 110px;
+  width: 750px;
+  background-color: white;
+
+  & > li:hover {
+    background-color: lightslategray;
+  }
+}

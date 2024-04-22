@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Comment } from '../comments';
+import { Comment } from '../types';
 import { CommentComponent } from '../comment/comment.component';
 
 @Component({

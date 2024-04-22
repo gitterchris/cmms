@@ -1,4 +1,11 @@
 <div class="comment-box">
+  <app-users-list
+    *ngIf="showUserList"
+    [users]="users"
+    (onUserHover)="handleUserHover($event)"
+    (onUserClick)="handleUserClick($event)"
+  />
+
   <label for="comment">Completion Notes:</label>
   <div [formGroup]="form">
     <textarea

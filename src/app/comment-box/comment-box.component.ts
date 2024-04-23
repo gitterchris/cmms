@@ -96,20 +96,15 @@ export class CommentBoxComponent {
 
     const selectedUser = this.userService.getUser(this.selectedUserID);
 
-    // TODO: this is still buggy. Please fix.
-    const oldTextAreaValue = this.inputRef.value;
+    const oldTextAreaValue = this.removeNewLine(this.inputRef.value);
 
     const startIndex = this.getStartIndex();
     const newLeftSide = oldTextAreaValue.slice(0, startIndex);
     const currentFilter = this.getCurrentWordBeingTyped();
-    const endIndex = startIndex + currentFilter.length + 1; // +1 for the '@' sign
+    const endIndex = startIndex + currentFilter.length;
     const newRightSide = oldTextAreaValue.slice(endIndex);
-
-    const newTextAreaValue = `${newLeftSide
-      .replace('\n', '')
-      .trim()} @${selectedUser} ${newRightSide
-      .replace('\n', '')
-      .trim()} `.trim();
+    const newTextAreaValue =
+      `${newLeftSide.trim()} @${selectedUser} ${newRightSide.trim()} `.trim();
     this.inputRef.value = newTextAreaValue + ' ';
 
     // not sure if mutating this is a good idea in Angular since this form is coming from parent.
@@ -133,7 +128,14 @@ export class CommentBoxComponent {
   getCurrentWordBeingTyped() {
     const startIndex = this.getStartIndex();
     const endIndex = this.inputRef.selectionStart;
-    return this.inputRef.value.substring(startIndex, endIndex);
+    return this.removeNewLine(
+      this.inputRef.value.substring(startIndex, endIndex)
+    );
+  }
+
+  // Do not allow new line for the mean time.
+  removeNewLine(str: string) {
+    return str.replace(/[\r\n\v]+/g, '');
   }
 
   manageUserList() {

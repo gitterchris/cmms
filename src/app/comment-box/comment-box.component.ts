@@ -5,6 +5,8 @@ import { UsersListComponent } from '../users-list/users-list.component';
 import { UsersService } from '../users.service';
 import { User } from '../types';
 
+type ArrowKeyType = 'up' | 'down';
+
 @Component({
   selector: 'app-comment-box',
   standalone: true,
@@ -37,27 +39,41 @@ export class CommentBoxComponent {
     if (this.showUserList === false) return;
 
     if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      const currentSelectedIndex = this.filteredUsers.findIndex(
-        (user) => this.selectedUserID === user.userID
-      );
-      this.selectedUserID =
-        currentSelectedIndex === -1 || currentSelectedIndex === 0
-          ? this.filteredUsers[this.filteredUsers.length - 1].userID
-          : this.filteredUsers[currentSelectedIndex - 1].userID;
+      this.handleArrowKeyEvent(event, 'up');
     }
 
     if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      const currentSelectedIndex = this.filteredUsers.findIndex(
-        (user) => this.selectedUserID === user.userID
-      );
-      this.selectedUserID =
-        currentSelectedIndex === -1 ||
-        currentSelectedIndex === this.filteredUsers.length - 1
-          ? this.filteredUsers[0].userID
-          : this.filteredUsers[currentSelectedIndex + 1].userID;
+      this.handleArrowKeyEvent(event, 'down');
     }
+  }
+
+  handleArrowKeyEvent(event: KeyboardEvent, keyType: ArrowKeyType) {
+    event.preventDefault();
+
+    const currentSelectedIndex = this.filteredUsers.findIndex(
+      (user) => this.selectedUserID === user.userID
+    );
+
+    if (keyType === 'up') {
+      this.scrollUp(currentSelectedIndex);
+    } else {
+      this.scrollDown(currentSelectedIndex);
+    }
+  }
+
+  scrollUp(currentSelectedIndex: number) {
+    this.selectedUserID =
+      currentSelectedIndex === -1 || currentSelectedIndex === 0
+        ? this.filteredUsers[this.filteredUsers.length - 1].userID
+        : this.filteredUsers[currentSelectedIndex - 1].userID;
+  }
+
+  scrollDown(currentSelectedIndex: number) {
+    this.selectedUserID =
+      currentSelectedIndex === -1 ||
+      currentSelectedIndex === this.filteredUsers.length - 1
+        ? this.filteredUsers[0].userID
+        : this.filteredUsers[currentSelectedIndex + 1].userID;
   }
 
   onKeyup(event: KeyboardEvent) {
@@ -94,15 +110,13 @@ export class CommentBoxComponent {
   typeahead() {
     if (this.selectedUserID === 0) return;
 
-    const selectedUser = this.userService.getUser(this.selectedUserID);
-
     const oldTextAreaValue = this.removeNewLine(this.inputRef.value);
-
     const startIndex = this.getStartIndex();
     const newLeftSide = oldTextAreaValue.slice(0, startIndex);
     const currentFilter = this.getCurrentWordBeingTyped();
     const endIndex = startIndex + currentFilter.length;
     const newRightSide = oldTextAreaValue.slice(endIndex);
+    const selectedUser = this.userService.getUser(this.selectedUserID);
     const newTextAreaValue =
       `${newLeftSide.trim()} @${selectedUser} ${newRightSide.trim()} `.trim();
     this.inputRef.value = newTextAreaValue + ' ';
@@ -111,7 +125,7 @@ export class CommentBoxComponent {
     // without this, form is not picking up the entire username value.
     this.form.value.comment = newTextAreaValue + ' ';
     const newCursorLocation =
-      newLeftSide.length + (selectedUser?.length ?? 0) + 2;
+      newLeftSide.length + (selectedUser?.length ?? 0) + 2; // +2 because of `@` and an empty space at the end.
     this.inputRef.selectionStart = newCursorLocation;
     this.inputRef.selectionEnd = newCursorLocation;
   }
